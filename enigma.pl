@@ -43,15 +43,14 @@ get '/v/:key' => sub {
 
     my $datapack = $db->get($key);
     unless ($datapack) {
-        $c->render( text => 'Not found' );
+        $c->reply->not_found;
         return;
     }
     my ( $expiration, $data ) = unpack 'LL/a*', $datapack;
 
     if ( $expiration != 0 && $expiration < time ) {
         $db->delete($key);
-        $c->render('enigma_view');
-        #$c->render( text => 'Not found' );
+        $c->reply->not_found;
         return;
     }
     if ( $expiration == 0 ) {
@@ -124,6 +123,16 @@ Mojo::IOLoop->recurring(10 => sub {
 
 app->start;
 __DATA__
+
+@@ not_found.html.ep
+% layout 'default';
+% title 'Enigma Энигма: Ничего не найдено!';
+
+<legend><a href="//enigma.kadavr.com">Enigma</a></legend>
+<div class="col-md-2"></div>
+<div class="col-md-8">
+    <div class="alert alert-danger" role="alert"><strong>Not Found!</strong> The requested URL was not found on this server.</div>
+</div>
 
 @@ enigma_view.html.ep
 % layout 'default';
@@ -235,6 +244,10 @@ __DATA__
         })
     });
   </script>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <meta name="description" content="Enigma: одноразовые ссылки, onetime urls.">
+  <meta name="keywords" content="Enigma, Энигма, одноразовая, временная, секретная, сcылка, onetime, secret, url">
   <title><%= title %></title>
   </head>
   <body>
