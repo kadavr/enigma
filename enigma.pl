@@ -17,6 +17,7 @@ use RocksDB;
 my $db = RocksDB->new( './enigma_db', { create_if_missing => 1 } );
 
 app->secrets( ['my_super_secret'] );
+app->mode('production');
 
 get '/' => sub {
     my $c = shift;
@@ -124,7 +125,7 @@ Mojo::IOLoop->recurring(10 => sub {
 app->start;
 __DATA__
 
-@@ not_found.html.ep
+@@ not_found.production.html.ep
 % layout 'default';
 % title 'Enigma Энигма: Ничего не найдено!';
 
