@@ -43,7 +43,6 @@ get '/v/:key' => sub {
 
     my $datapack = $db->get($key);
     unless ($datapack) {
-        warn "unless datapack";
         $c->render( text => 'Not found' );
         return;
     }
@@ -58,8 +57,6 @@ get '/v/:key' => sub {
     if ( $expiration == 0 ) {
         $db->delete($key);
     }
-    use Data::Dumper;
-    warn Dumper(\%ENV,$ENV{REMOTE_ADDR});
     utf8::decode($data);
     $c->stash( expiration => $expiration, payload => $data);
     $c->render('enigma_view');
