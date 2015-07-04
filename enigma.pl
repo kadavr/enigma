@@ -58,7 +58,7 @@ get '/v/:key' => sub {
         $db->delete($key);
     }
     utf8::decode($data);
-    $c->stash( expiration => $expiration, payload => $data);
+    $c->stash( expiration => $expiration, payload => $data );
     $c->render('enigma_view');
 };
 
@@ -109,18 +109,21 @@ LOOP: {
     $c->redirect_to('/');
 };
 
-Mojo::IOLoop->recurring(10 => sub {
-    #simple GC
-    app->log->debug("Starting GC");#fucking idiot
-    my $iter = $db->new_iterator->seek_to_first;
-    while (my ($key, $datapack) = $iter->each) {
-      my $expiration = unpack 'L',$datapack;
-      if( $expiration < time ){
-        app->log->debug("GC removes key " . $key);
-        $db->delete($key);
-      }
+Mojo::IOLoop->recurring(
+    10 => sub {
+
+        #simple GC
+        app->log->debug("Starting GC");    #fucking idiot
+        my $iter = $db->new_iterator->seek_to_first;
+        while ( my ( $key, $datapack ) = $iter->each ) {
+            my $expiration = unpack 'L', $datapack;
+            if ( $expiration < time ) {
+                app->log->debug( "GC removes key " . $key );
+                $db->delete($key);
+            }
+        }
     }
-});
+);
 
 app->start;
 __DATA__
@@ -129,7 +132,7 @@ __DATA__
 % layout 'default';
 % title 'Enigma Энигма: Ничего не найдено!';
 
-<legend><a href="//enigma.kadavr.com">Enigma</a></legend>
+<legend><a href="/">Enigma</a></legend>
 <div class="col-md-2"></div>
 <div class="col-md-8">
     <div class="alert alert-danger" role="alert"><strong>Not Found!</strong> The requested URL was not found on this server.</div>
@@ -139,7 +142,7 @@ __DATA__
 % layout 'default';
 % title 'Enigma Энигма';
 
-<legend><a href="//enigma.kadavr.com">Enigma</a></legend>
+<legend><a href="/">Enigma</a></legend>
 <div class="col-md-2"></div>
 <div class="col-md-8">
     <div class="panel panel-default">
@@ -158,7 +161,7 @@ __DATA__
 <fieldset>
 
 <!-- Form Name -->
-<legend><a href="//enigma.kadavr.com">Enigma</a></legend>
+<legend><a href="/">Enigma</a></legend>
 
 <!-- Textarea -->
 <div class="form-group">
