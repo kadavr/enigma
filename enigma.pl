@@ -164,7 +164,7 @@ __DATA__
 <div class="form-group">
   <label class="col-md-4 control-label" for="textarea">Text (maxlen 400)</label>
   <div class="col-md-4">                     
-    <textarea class="form-control <%= ($error || 0 ) == 2 ? b('alert-danger') : () %>" id="textarea" name="data" maxlength="400"></textarea>
+    <textarea class="form-control <%= ($error || 0 ) > 0 ? b('alert-danger') : () %>" id="textarea" name="data" maxlength="400"></textarea>
   </div>
 </div>
 
